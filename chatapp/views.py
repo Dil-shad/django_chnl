@@ -1,10 +1,15 @@
 from django.shortcuts import render
 import threading
 # Create your views here.
+from channels.layers import get_channel_layer
 
-
-def index(request):
+async def index(request):
     print(threading.get_native_id())
+    channel_layer = get_channel_layer()
+    await channel_layer.group_send("chat_a1", {
+                    'type': 'chat_message',
+                    'message': "index-notification",
+                    })
     return render(request, 'index.html')
 
 
